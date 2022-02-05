@@ -9,18 +9,21 @@ contract simpleCryptoCurrency {
     string name = "Simple";
     string ticker = "SIMP";
     string author = "Glowie";
+	 // Total supply of the coin
+	 uint256 supply = 1_000_000
 
     constructor() {
         owner = msg.sender;
     }
 
-    uint256 private coin_amount = 0;
-    function getCoinAmount() public view returns (uint256) {
-        return coin_amount;
+	 // getTotalsupply returns the contract's supply of money.
+    function getTotalSupply() public view returns (uint256) {
+        return supply;
     }
 
-    function addCoin() public payable {
-        coin_amount += msg.value;
+	 // depositCoin allows user to store coins to the contract
+    function depositCoin() public payable {
+		  accounts[msg.sender] += msg.value;
     }
 
     modifier ownerOnly {
@@ -28,21 +31,30 @@ contract simpleCryptoCurrency {
         _;
     }
 
-    mapping(address => uint256) balances;
+    mapping(address => uint256) accounts;
 
     // Move `amount` coins from current account to `to`
     function transfer(address to, uint256 amount) public {
-        balances[]
+		  require(amount < accounts[msg.sender]);
+		  accounts[msg.sendre] -= amount;
+		  accounts[to] += amount;
     }
 
-    // Destroy `amount` coins 
+    // burn destroys `amount` coins 
     function burn(uint256 amount) public ownerOnly{
-
+		  require(amount <= supply)
+		  supply -= amount;
     }
 
-    // Create new `amount` coins and store it to `to`
-    function mint(uint256 amount, address to) public ownerOnly{
-        
+    // mint creates new `amount` of coins and store it to the contract.
+    function mint(uint256 amount) public ownerOnly{
+		  supply += amount;
     }
 
+	 // give sends coins from contract to address `to`.
+	 function give(address to, uint256 amount) public ownerOnly {
+		  require(amount <= supply);
+		  supply -= amount;
+		  accounts[to] += amount;
+	 }
 }

@@ -10,7 +10,7 @@ contract simpleCryptoCurrency {
     string ticker = "SIMP";
     string author = "Glowie";
 	 // Total supply of the coin
-	 uint256 supply = 1_000_000
+	 uint256 supply = 1_000_000;
 
     constructor() {
         owner = msg.sender;
@@ -36,13 +36,13 @@ contract simpleCryptoCurrency {
     // Move `amount` coins from current account to `to`
     function transfer(address to, uint256 amount) public {
 		  require(amount < accounts[msg.sender]);
-		  accounts[msg.sendre] -= amount;
+		  accounts[msg.sender] -= amount;
 		  accounts[to] += amount;
     }
 
     // burn destroys `amount` coins 
     function burn(uint256 amount) public ownerOnly{
-		  require(amount <= supply)
+		  require(amount <= supply);
 		  supply -= amount;
     }
 

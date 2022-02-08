@@ -24,6 +24,7 @@ contract simpleCryptoCurrency {
 	 // depositCoin allows user to store coins to the contract
     function depositCoin() public payable {
 		  accounts[msg.sender] += msg.value;
+          supply += msg.value;
     }
 
     modifier ownerOnly {
@@ -32,6 +33,10 @@ contract simpleCryptoCurrency {
     }
 
     mapping(address => uint256) accounts;
+
+    function getCurrentBalance() public view returns(uint256) {
+        return accounts[msg.sender];
+    }
 
     // Move `amount` coins from current account to `to`
     function transfer(address to, uint256 amount) public {
@@ -53,7 +58,7 @@ contract simpleCryptoCurrency {
 
 	 // give sends coins from contract to address `to`.
 	 function give(address to, uint256 amount) public ownerOnly {
-		  require(amount <= supply);
+          require(amount <= supply);
 		  supply -= amount;
 		  accounts[to] += amount;
 	 }
